@@ -55,7 +55,37 @@ X_test = sc.transform(X_test)
 
 # Importing the Keras libraries and packages
 
-import keras
+import keras 
+from keras.models import Sequential
+from keras.layers import Dense
+
+
+# Initialising the ANN
+classifier = Sequential()
+
+
+# Adding the input layer and the first hidden layer
+# output_dim is currently 6 (11 nodes + 1 / 2) later will teach a better
+# way to identify the output_dim in part 10 of the course
+classifier.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation ='relu', input_dim = 11))
+#classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 11))
+
+
+# Adding the second hidden layer
+
+# Adding the output layer
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Part 3 - Making the predictions and evaluating the model
