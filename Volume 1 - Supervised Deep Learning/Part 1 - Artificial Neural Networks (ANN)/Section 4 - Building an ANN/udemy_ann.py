@@ -67,14 +67,16 @@ classifier = Sequential()
 # Adding the input layer and the first hidden layer
 # output_dim is currently 6 (11 nodes + 1 / 2) later will teach a better
 # way to identify the output_dim in part 10 of the course
-classifier.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation ='relu', input_dim = 11))
-#classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 11))
-
+classifier.add(Dense(kernel_initializer="uniform", activation="relu", input_dim=11, units=6))
 
 # Adding the second hidden layer
+# notice that input_dim is not here since we defined it in the first hidden 
+# layer
+classifier.add(Dense(kernel_initializer="uniform", activation="relu", units=6))
 
 # Adding the output layer
 
+classifier.add(Dense(kernel_initializer="uniform", activation="sigmoid", units=1))
 
 
 
