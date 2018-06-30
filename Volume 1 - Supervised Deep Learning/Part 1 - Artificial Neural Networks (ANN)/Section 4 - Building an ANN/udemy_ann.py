@@ -78,16 +78,12 @@ classifier.add(Dense(kernel_initializer="uniform", activation="relu", units=6))
 
 classifier.add(Dense(kernel_initializer="uniform", activation="sigmoid", units=1))
 
+# Compliling the ANN
+# since we are looking for a binary we use binary_crossentropy, if there are more than we will use a different one
+classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
-
-
-
-
-
-
-
-
-
+# Fitting the ANN to the training set
+classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
 
 
 # Part 3 - Making the predictions and evaluating the model
