@@ -85,26 +85,42 @@ classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = [
 # Fitting the ANN to the training set
 classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
 
+
+
+# Part 3 - Making the predictions and evaluating the model
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
 y_pred = (y_pred > 0.5) # less than 50 may leave, higher than 50 may stay
+
+# Predicting a single new observation
+"""Predict if the customer with the following informations will leave the bank:
+Geography: France
+Credit Score: 600
+Gender: Male
+Age: 40
+Tenure: 3
+Balance: 60000
+Number of Products: 2
+Has Credit Card: Yes
+Is Active Member: Yes
+Estimated Salary: 50000"""
+
+new_prediction = classifier.predict(sc.transform(np.array([[0.0,0,600, 1, 40, 3,60000, 2, 1,1,50000]]))) # sc.transform to ensure we have it in the same scale. The first field is 0 but added it as 0.0 to avoid the float warning when executing
+
+new_prediction = (new_prediction > 0.5)
+
+
 
 # Making the confusion matrix
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
-# Part 3 - Making the predictions and evaluating the model
+# Part 4 - Evaluating, Improving and Tuning the ANN
+# Here we will be running part 1 to prepare the data
 
+# Evaluating the ANN
 
+# Improving the ANN
 
+# Tuning the ANN
 
-
-# Fitting classifier to the Training set
-# Create your classifier here
-
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
-
-# Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, y_pred)
