@@ -58,22 +58,23 @@ X_test = sc.transform(X_test)
 import keras 
 from keras.models import Sequential
 from keras.layers import Dense
-
+from keras.layers import Dropout # added after discussion on part 4
 
 # Initialising the ANN
 classifier = Sequential()
 
 
-# Adding the input layer and the first hidden layer
+# Adding the input layer and the first hidden layer with dropout
 # output_dim is currently 6 (11 nodes + 1 / 2) later will teach a better
 # way to identify the output_dim in part 10 of the course
 classifier.add(Dense(kernel_initializer="uniform", activation="relu", input_dim=11, units=6))
+classifier.add(Dropout(p = 0.1)) # experient with value when it stops overfitting but try to say below .05
 
 # Adding the second hidden layer
 # notice that input_dim is not here since we defined it in the first hidden 
 # layer
 classifier.add(Dense(kernel_initializer="uniform", activation="relu", units=6))
-
+classifier.add(Dropout(p = 0.1)) # experient with value when it stops overfitting but try to say below .05
 # Adding the output layer
 
 classifier.add(Dense(kernel_initializer="uniform", activation="sigmoid", units=1))
@@ -116,11 +117,50 @@ from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
 # Part 4 - Evaluating, Improving and Tuning the ANN
-# Here we will be running part 1 to prepare the data
+# Here we will be running part 1 to prepare the data so we may do K-Fold Cross validation in this section
 
 # Evaluating the ANN
+# Keres wrapper
+from keras.wrappers.scikit_learn   import KerasClassifier
+
+from sklearn.model_selection import cross_val_score
+from keras.models import Sequential
+from keras.layers import Dense
+
+# this function architecture to build the ANN
+def build_classifier():
+# Initialising the ANN
+    classifier = Sequential()
+
+
+# Adding the input layer and the first hidden layer
+# output_dim is currently 6 (11 nodes + 1 / 2) later will teach a better
+# way to identify the output_dim in part 10 of the course
+    classifier.add(Dense(kernel_initializer="uniform", activation="relu", input_dim=11, units=6))
+
+# Adding the second hidden layer
+# notice that input_dim is not here since we defined it in the first hidden 
+# layer
+    classifier.add(Dense(kernel_initializer="uniform", activation="relu", units=6))
+
+# Adding the output layer
+
+    classifier.add(Dense(kernel_initializer="uniform", activation="sigmoid", units=1))
+
+# Compliling the ANN
+# since we are looking for a binary we use binary_crossentropy, if there are more than we will use a different one
+    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+    return classifier
+classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
+
+mean = accuracies.mean()
+variances = accuracies.std()
 
 # Improving the ANN
+# Droupout Regularization to reduce overfitting if needed
+
+
 
 # Tuning the ANN
 
