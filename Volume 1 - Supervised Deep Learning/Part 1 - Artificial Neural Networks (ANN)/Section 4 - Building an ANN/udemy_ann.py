@@ -163,4 +163,67 @@ variances = accuracies.std()
 
 
 # Tuning the ANN
+# this Section and part 1 above are executed. The analysis takes a long time to finish. 
+
+from keras.wrappers.scikit_learn   import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.models import Sequential
+from keras.layers import Dense
+
+# this function architecture to build the ANN
+def build_classifier(optimizer):
+# Initialising the ANN
+    classifier = Sequential()
+
+
+# Adding the input layer and the first hidden layer
+# output_dim is currently 6 (11 nodes + 1 / 2) later will teach a better
+# way to identify the output_dim in part 10 of the course
+    classifier.add(Dense(kernel_initializer="uniform", activation="relu", input_dim=11, units=6))
+
+# Adding the second hidden layer
+# notice that input_dim is not here since we defined it in the first hidden 
+# layer
+    classifier.add(Dense(kernel_initializer="uniform", activation="relu", units=6))
+
+# Adding the output layer
+
+    classifier.add(Dense(kernel_initializer="uniform", activation="sigmoid", units=1))
+
+# Compliling the ANN
+# since we are looking for a binary we use binary_crossentropy, if there are more than we will use a different one
+    classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', metrics = ['accuracy'])
+    return classifier
+classifier = KerasClassifier(build_fn = build_classifier)
+
+parameters = {'batch_size': [25, 32],
+              'epochs':[100, 500],
+              'optimizer':['adam', 'rmsprop']}
+
+grid_search = GridSearchCV(estimator = classifier,
+                          param_grid = parameters,
+                          scoring = 'accuracy',
+                          cv=10)
+
+grid_search = grid_search.fit(X_train, y_train)
+best_parameters = grid_search.best_params_
+best_accuracy = grid_search.best_score_
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
